@@ -9,3 +9,6 @@ set path = (/home/ascds/DS.release/ots/bin/ $path)
 
 
 /opt/local/bin/perl /data/mta/Script/Trending/Trending_Script/extract_data.perl
+
+
+chgrp mtagroup /data/mta/Script/Trending/Trend/*
