@@ -6,7 +6,7 @@
 #														#
 #		author: t. isobe (tisobe@cfa.harvard.edu)							#
 #														#
-#		last updata: Feb 11, 2010									#
+#		last updata: Mar 21, 2011									#
 #														#
 #################################################################################################################
 
@@ -16,7 +16,7 @@
 
 $main_dir      = '/data/mta/Script/Trending/';
 $mp_dir        = '/data/mta/www/mp_reports/';
-$script_dir    = "$main_dir/Script/";
+$script_dir    = "$main_dir/Trending_Script/";
 $house_keeping = "$script_dir/house_keeping/";
 $data_dir      = "$main_dir/Trend/";
 
