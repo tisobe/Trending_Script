@@ -1,0 +1,12 @@
+source /home/mta/.ascrc 
+
+rm -rf param
+mkdir param
+source /home/mta/bin/reset_param
+setenv PFILES "${PDIRS}" 
+set path = (/home/ascds/DS.release/bin/  $path)
+set path = (/home/ascds/DS.release/ots/bin/ $path)
+
+/usr/local/bin/perl /data/mta/Script/Trending/Trending_Script/prep_for_test.perl 
+/usr/local/bin/perl /data/mta/Script/Trending/Trending_Script/extract_data.perl test
+

@@ -6,38 +6,61 @@
 #														#
 #		author: t. isobe (tisobe@cfa.harvard.edu)							#
 #														#
-#		last updata: Mar 21, 2011									#
+#		last updata: Feb 27, 2013									#
 #														#
 #################################################################################################################
+#
+#--- check whether this is a test case. 
+#
+
+$comp_test = $ARGV[0];
+chomp $cmop_test;
 
 #
 #--- set directories
 #
 
-$main_dir      = '/data/mta/Script/Trending/';
-$mp_dir        = '/data/mta/www/mp_reports/';
-$script_dir    = "$main_dir/Trending_Script/";
-$house_keeping = "$script_dir/house_keeping/";
-$data_dir      = "$main_dir/Trend/";
+if($comp_test =~ /test/i){
+	$main_dir      = '/data/mta/Script/Trending/';
+	$script_dir    = "$main_dir/Trending_Script/";
+	$house_keeping = "$script_dir/house_keeping/";
+	$mp_dir        = "$house_keeping/Test_prep/Input/";
+	$data_dir      = "$main_dir/Test_out/";
+}else{
+	$main_dir      = '/data/mta/Script/Trending/';
+	$mp_dir        = '/data/mta/www/mp_reports/';
+	$script_dir    = "$main_dir/Trending_Script/";
+	$house_keeping = "$script_dir/house_keeping/";
+	$data_dir      = "$main_dir/Trend/";
+}
 
 
 #
 #--- find out which "date" has actual data
 #
-
-$input = `ls -rt $mp_dir*/compaciscent/data/compaciscent_summ.fits`;
-@list  = split(/\s+/, $input);
-@date_list = ();
-foreach $ent (@list){
-	@atemp = split(/\//, $ent);
-	push(@date_list, $atemp[5]);
+if($comp_test =~ /test/i){
+	$input     =  "$mp_dir".'compaciscent_summ.fits';
+	@list      = ($input);
+	@date_list = ('20130227');
+}else{
+	$input = `ls -rt $mp_dir*/compaciscent/data/compaciscent_summ.fits`;
+	@list  = split(/\s+/, $input);
+	@date_list = ();
+	foreach $ent (@list){
+		@atemp = split(/\//, $ent);
+		push(@date_list, $atemp[5]);
+	}
 }
 
 #
 #--- read which "date" are already processed
 #
 
-open(FH, "$house_keeping/date_list");
+if($comp_test =~ /test/i){
+	open(FH, "$house_keeping/Test_prep/date_list");
+}else{
+	open(FH, "$house_keeping/date_list");
+}
 while(<FH>){
 	chomp $_;
 	$last_entry = $_;
@@ -67,7 +90,9 @@ if($dcnt == 0){
 #
 #-- add the date we are processing to the date_list
 #
-open(OUT, ">>$house_keeping/date_list");
+if($comp_test !~ /test/i){
+	open(OUT, ">>$house_keeping/date_list");
+}
 #
 #-- process data fro the all date we have not processed
 #
@@ -100,7 +125,11 @@ foreach $edate (@new){
 #--- exctract msid and its daily average and error
 #
 		$name = "$ent".'_summ.fits';
-		$data = '/data/mta/www/mp_reports/'."$edate".'/'."$ent".'/data/'."$name";
+		if($comp_test =~ /test/i){
+			$data = "$mp_dir/$name";
+		}else{
+			$data = '/data/mta/www/mp_reports/'."$edate".'/'."$ent".'/data/'."$name";
+		}
 		$line = "$data".'[cols name,average,error]';
 	
 		system("dmlist \"$line\" opt=data > zout");
@@ -150,6 +179,7 @@ foreach $edate (@new){
 			$line = "$line\t"."${data.$aent}{val}[0]";
 			$line = "$line\t"."${err.$aent}{val}[0]";
 		}
+
 #
 #--- create an ascii data file
 #
@@ -160,6 +190,7 @@ foreach $edate (@new){
 #--- convert the ascii data file into a fits file
 #	
 		system("dmcopy zdata zdata.fits clobber=yes");
+
 #
 #--- change column names to appropriate ones (e.g. col1, col2 to HAFTBGRD1_AVG, HAFTBGRD1_DEV)
 #
@@ -175,12 +206,13 @@ foreach $edate (@new){
 #	
 		$pline = 'zdata.fits[cols '."$cnames".']';
 		system("dmcopy \"$pline\" outfile=zdata_clean.fits clobber=yes");
-	
 #
 #--- merge the new data with the past data
 #
 		$fits = 'avg_'."$ent".'.fits';
+print "$data_dir/$fits\n";
 		system("dmmerge \"$data_dir/$fits,zdata_clean.fits\" outfile=out.fits clobber=yes");
+
 		system("mv out.fits $data_dir/$fits");
 
 		system("rm zout zdata zdata.fits zdata_clean.fits");
