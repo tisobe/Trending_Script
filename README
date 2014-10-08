@@ -1,0 +1,53 @@
+Trending 
++++++++++
+
+This set of scripts extract needed information from /data/mta/www/mp_reports/ and
+update mta database.
+
+
+Scripts:
+--------
+trend_wrap_script
+-----------------
+a warpping script to run trending_main_script
+
+trend_main_script
+-----------------
+set an environment and run the script
+
+extract_data.py
+---------------
+This script reads data and update the database
+
+Input:
+
+ /data/mta/www/mp_reports/<date>/<sub dir name>/data/<sub dir name>_summ.fits
+where <sub dir name> is one of the following:
+
+'compaciscent', 'compacispwr', 'compephinkeyrates', 'compgradkodak', 
+'compsimoffset', 'gradablk', 'gradahet', 'gradaincyl', 'gradcap',    
+'gradfap', 'gradfblk', 'gradhcone', 'gradhhflex', 'gradhpflex',     
+'gradhstrut', 'gradocyl', 'gradpcolb', 'gradperi', 'gradsstrut', 'gradtfte'
+
+
+Output:
+In the directory /data/mta/Script/Trending/Trend/
+
+    avg_<sub dir name>.fits
+
+
+Directory
+----------
+
+'/data/mta/Script/Trending/Scripts/'        : bin_dir
+'/data/mta/www/mp_reports/'                 : mp_dir
+'/data/mta/Script/Trending/house_keeping/'  : house_keeping
+'/data/mta/Script/Trending/Trend/'          : data_dir
+'/data/mta/Script/Python_script2.7/'        : mta_dir
+
+
+
+Cron Job:
+---------
+0 7  * * * cd /data/mta/Script/Trending; /data/mta/Script/Trending/Scripts/trend_wrap_script >> $HOME/Logs//trending.perl.cron 2>&1
+
