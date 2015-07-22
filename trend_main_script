@@ -1,7 +1,9 @@
+cd /data/mta/Script/Trending/Exc
+
+rm -rf /data/mta/Script/Trending/Exc/param
+mkdir /data/mta/Script/Trending/Exc/param 
+
 setenv PYTHONPATH "/proj/sot/ska/arch/x86_64-linux_CentOS-5/lib/python2.7/site-packages"
 
 /data/mta/Script/Trending/Scripts/extract_data.py
 
-chmod 755 /data/mta/Script/Trending/Trend/*
-
-chgrp mtagroup /data/mta/Script/Trending/Trend/*

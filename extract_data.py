@@ -6,7 +6,7 @@
 #                                                                                                       #
 #               author: t. isobe (tisobe@cfa.harvard.edu)                                               #
 #                                                                                                       #
-#               last update: Oct 07, 2014                                                               #
+#               last update: Oct 15, 2014                                                               #
 #                                                                                                       #
 #########################################################################################################
 
@@ -120,9 +120,9 @@ def extract_data(name_list):
         for i in range(0, len(dom_save)):
             if dom_save[i] < tmax:
                 continue
-            numpy.append(time, dom_save[i])
+            time = numpy.append(time, [dom_save[i]])
             for j in range(0, dlen2):
-                numpy.append(data_set[j], data_save[j][i])
+                data_set[j] = numpy.append(data_set[j], [data_save[j][i]])
 
         for i in range(0, len(time)):
             time[i] = str(int(time[i]))

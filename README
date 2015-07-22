@@ -45,6 +45,13 @@ Directory
 '/data/mta/Script/Trending/Trend/'          : data_dir
 '/data/mta/Script/Python_script2.7/'        : mta_dir
 
+Note
+----
+The data created are used by: 
+
+/data/mta4/Deriv/get_grad_data (and there is get_comp_data, too)
+
+Then ed_comp_grad.pro does the plotting.
 
 
 Cron Job:
